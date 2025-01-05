@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const checkAuth = require('../middleware/App.middleware');
 const projectSchema = require('../models/project.model');
-const mongoose = require('mongoose');
+
 
 
 
@@ -55,7 +55,7 @@ router.post('/create-project', checkAuth,   upload.single('projectImage'), (req,
   projectSchema.create({
     title,
     description,
-    maintainer: mongoose.Types.ObjectId(req.user.id), // convert to ObjectId
+    maintainer: req.user.githubId,
     type,
     rewards,
     experienceLevel,
