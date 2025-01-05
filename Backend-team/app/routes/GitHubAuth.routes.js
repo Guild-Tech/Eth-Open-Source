@@ -103,7 +103,7 @@ router.get(
         // Sign the token with githubId
         const token = jwt.sign({ userId: user.githubId }, process.env.JWT_KEY, { expiresIn: '1h' });
 
-         res.json({json});
+         res.json({ token });
         // Redirect to onboarding for role selection
         const onboardingURL = `http://localhost:5173/onboarding?token=${encodeURIComponent(token)}`;
         return res.redirect(onboardingURL);
@@ -117,7 +117,7 @@ router.get(
 
       // Generate token with role for existing users
       const token = jwt.sign({ userId: user.githubId, role }, process.env.JWT_KEY, { expiresIn: '1h' });
-      res.json({token});
+      res.json({ token });
 
       // Redirect to appropriate dashboard or onboarding
       const redirectURL =
