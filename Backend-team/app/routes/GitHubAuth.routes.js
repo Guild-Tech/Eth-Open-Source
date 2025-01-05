@@ -7,6 +7,7 @@ const contributorSchema = require('../models/contributor.model');
 const maintainerSchema = require('../models/maintainer.model');
 const checkAuth = require('../middleware/App.middleware')
 const router = express.Router();
+require('dotenv').config();
 
 // GitHub Login Endpoint
 router.get('/', passport.authenticate('github', { scope: ['user:email', 'repo', 'issues'] }));
