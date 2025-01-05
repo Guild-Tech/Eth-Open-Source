@@ -78,7 +78,7 @@ router.get(
   passport.authenticate('github', { session: false }),
   async (req, res) => {
     try {
-      const githubId = req.user.id; // GitHub ID, this is the unique identifier
+      const githubId = req.user.githubId; // GitHub ID, this is the unique identifier
       const accessToken = req.user.accessToken; // GitHub access token
 
       // Fetch user repositories from GitHub
