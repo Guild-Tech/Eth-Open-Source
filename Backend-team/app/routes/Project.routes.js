@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const checkAuth = require('../middleware/App.middleware');
 const projectSchema = require('../models/project.model');
-
+const mongoose = require('mongoose')
 
 
 
@@ -39,23 +39,52 @@ fileFilter: fileFilter })
 
 
 // Create a project
-router.post('/create-project', checkAuth,   upload.single('projectImage'), (req, res) => {
+// router.post('/create-project', checkAuth,   upload.single('projectImage'), (req, res) => {
 
 
-  const { title, description, type, rewards, 
-    experienceLevel, skillsRequired, projectLeads,
-    skillsCategory, longDescription, userLinks } = req.body;
+//   const { title, description, type, rewards, 
+//     experienceLevel, skillsRequired, projectLeads,
+//     skillsCategory, longDescription, userLinks } = req.body;
 
-  const projectImage = req.file ? req.file.path : undefined;
+//   const projectImage = req.file ? req.file.path : undefined;
 
- // Validate required fields
- if (!title || !description || !type) {
-  return res.status(400).json({ error: 'Title, description, and type are required fields.' });
- }
-  projectSchema.create({
+//  // Validate required fields
+//  if (!title || !description || !type) {
+//   return res.status(400).json({ error: 'Title, description, and type are required fields.' });
+//  }
+//   projectSchema.create({
+//     title,
+//     description,
+//     maintainer: req.user.githubId,
+//     type,
+//     rewards,
+//     experienceLevel,
+//     skillsRequired,
+//     projectImage,
+//     projectLeads,
+//     skillsCategory, 
+//     userLinks,
+//     longDescription,
+    
+//   })
+//     .then((project) => res.status(201).json(project))
+//     .catch((err) => res.status(500).json({ error: err.message }));
+// });
+
+const { title, description, type, rewards, experienceLevel, skillsRequired, projectLeads, skillsCategory, longDescription, userLinks } = req.body;
+const projectImage = req.file ? req.file.path : undefined;
+
+// Validate required fields
+if (!title || !description || !type) {
+    return res.status(400).json({ error: 'Title, description, and type are required fields.' });
+}
+
+const maintainerId = mongoose.Types.ObjectId(req.user.githubId); // Ensure it's an ObjectId
+
+projectSchema.create({
     title,
     description,
-    maintainer: req.user.githubId,
+    maintainer: maintainerId,  // Use ObjectId here if necessary
     type,
     rewards,
     experienceLevel,
@@ -65,11 +94,9 @@ router.post('/create-project', checkAuth,   upload.single('projectImage'), (req,
     skillsCategory, 
     userLinks,
     longDescription,
-    
-  })
-    .then((project) => res.status(201).json(project))
-    .catch((err) => res.status(500).json({ error: err.message }));
-});
+})
+.then((project) => res.status(201).json(project))
+.catch((err) => res.status(500).json({ error: err.message }));
 
 
 
